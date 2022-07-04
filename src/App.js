@@ -1,98 +1,49 @@
-import PlayPage from "./pages/PlayPage";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import GamePage from "./pages/GamePage";
 import HistoryPage from "./pages/HistoryPage";
-import CreateGamePage from "./pages/CreateGamePage";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { useState } from "react";
-import styled from "styled-components";
-import { nanoid } from "nanoid";
+import useToggle from "./Hooks/useToggle";
+import styled, { css } from "styled-components";
 
-function App() {
-  const [players, setPlayers] = useState([]);
-  const [nameOfGame, setNameOfGame] = useState("");
-  const [history, setHistory] = useState([]);
-  const navigate = useNavigate();
-
-  console.log(players);
-
+export default function App() {
+  const [darkMode, toggleDarkMode] = useToggle(false);
   return (
-    <AppLayout>
-      <Header>scorekeeper</Header>
-      <Routes>
-        <Route path="/" element={<PlayPage onCreateGame={createGame} />} />
-        <Route
-          path="/create"
-          element={
-            <CreateGamePage
-              nameOfGame={nameOfGame}
-              players={players}
-              onPlayerNames={handlePlayerNames}
-              onDecrementPlayerScore={decrementPlayerScore}
-              onIncrementPlayerScore={incrementPlayerScore}
-              onResetScores={resetScores}
-              onEndGame={endGame}
-            />
-          }
-        />
-        <Route path="/history" element={<HistoryPage history={history} />} />
-      </Routes>
-      <Navigation />
-    </AppLayout>
+    <>
+      <AppContainer darkMode={darkMode}>
+        <h1>Scorekeeper</h1>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/game" element={<GamePage />} />
+          <Route path="/history" element={<HistoryPage />} />
+        </Routes>
+        <Navigation />
+        <DarkButton onClick={toggleDarkMode}>
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </DarkButton>
+      </AppContainer>
+    </>
   );
-
-  function handlePlayerNames(name) {
-    setPlayers(name);
-  }
-
-  function createGame({ nameOfGame, playerName }) {
-    setNameOfGame(nameOfGame);
-    setPlayers(playerName.map((name) => ({ name, score: 0, id: nanoid() })));
-    navigate("./create");
-  }
-
-  function incrementPlayerScore(index) {
-    const player = players[index];
-
-    setPlayers([
-      ...players.slice(0, index),
-      { ...player, score: player.score + 1 },
-      ...players.slice(index + 1),
-    ]);
-  }
-
-  function decrementPlayerScore(index) {
-    const player = players[index];
-    setPlayers([
-      ...players.slice(0, index),
-      { ...player, score: player.score - 1 },
-      ...players.slice(index + 1),
-    ]);
-  }
-
-  function resetScores() {
-    setPlayers(players.map((player) => ({ ...player, score: 0 })));
-  }
-
-  function endGame() {
-    setHistory([{ players, nameOfGame, id: nanoid() }, ...history]);
-    setPlayers([]);
-    setNameOfGame("");
-    navigate("./");
-  }
 }
 
-const AppLayout = styled.div`
+const AppContainer = styled.div`
   display: grid;
-  gap: 10px;
+  place-items: center;
+  align-content: start;
+  gap: 20px;
+  min-height: 100vh;
   padding: 20px;
+  ${({ darkMode }) =>
+    darkMode &&
+    css`
+      background-color: #343;
+      color: #eee;
+    `}
 `;
 
-const Header = styled.h1`
-  margin: 10px;
-  text-align: center;
-  font-size: 1.6rem;
-  color: #1209af;
-  border-bottom: 2px solid #1209af;
+const DarkButton = styled.button`
+  background-color: #ccc;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 14px;
 `;
-
-export default App;
