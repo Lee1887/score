@@ -1,53 +1,52 @@
-import Input from "./Input";
 import styled from "styled-components";
+import Input from "./Input";
 import { useState } from "react";
-import Button from "./Button";
 
-export default function GameForm({ onCreateGame }) {
+export default function GameForm({ onCreateGame, darkMode }) {
   const [nameOfGame, setNameOfGame] = useState("");
-  const [playerName, setPlayerName] = useState("");
+  const [playerNames, setPlayerNames] = useState("");
 
-  const disabled = nameOfGame === "" || playerName === "";
+  // const disabled = nameOfGame === "" || playerNames === "";
 
   return (
-    <Form
-      aria-labelledby="formHeading"
-      autoComplete="off"
-      onSubmit={handleSubmit}
-    >
-      <h2 id="formHeading">Create a new game</h2>
-      <Input
-        name="nameOfGame"
-        labelText="Name of game"
-        placeholder="e.g. scribble.io"
-        value={nameOfGame}
-        onChange={(event) => setNameOfGame(event.target.value)}
-        required
-      />
-      <Input
-        name="playerName"
-        labelText="Player names"
-        placeholder="e.g Jane, John"
-        value={playerName}
-        onChange={(event) => setPlayerName(event.target.value)}
-        required
-      />
-      <Button disabled={disabled}>Create Game</Button>
-    </Form>
-  );
+    <>
+      <Form
+        aria-labelledby="formHeader"
+        autoComplete="off"
+        darkMode={darkMode}
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    onCreateGame({
-      nameOfGame,
-      playerName: playerName.split(",").map((name) => name.trim()),
-    });
-    setNameOfGame("");
-    setPlayerName("");
-  }
+        //onSubmit={handleSubmit}
+      >
+        <Label for="game">Name of the game :</Label>
+        <Input
+          name="nameOfGame"
+          placeholder="e.g. Tabu"
+          onChange={(event) => setNameOfGame(event.target.value)}
+          value={nameOfGame}
+          required
+        />
+
+        <Label for="player">Player names:</Label>
+        <Input
+          name="Player names"
+          placeholder="e.g. Klaus, Dieter"
+          onChange={(event) => setPlayerNames(event.target.value)}
+          value={playerNames}
+          required
+        />
+      </Form>
+    </>
+  );
 }
 
+const Label = styled.label`
+  color: black;
+  padding: 5px;
+  input {
+  }
+`;
+
 const Form = styled.form`
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
 `;

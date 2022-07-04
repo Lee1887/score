@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export default function Input({
-  name,
   labelText,
   placeholder,
+  name,
   value,
   onChange,
   required,
@@ -12,10 +12,10 @@ export default function Input({
     <>
       <label htmlFor={name}>{labelText}</label>
       <InputStyled
-        type="text"
         id={name}
         name={name}
         placeholder={placeholder}
+        type="text"
         value={value}
         onChange={onChange}
         required={required}
@@ -26,5 +26,4 @@ export default function Input({
 
 const InputStyled = styled.input`
   border: 2px solid #bbb;
-  height: 30px;
 `;

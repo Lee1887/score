@@ -1,33 +1,25 @@
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
+import { NavLink } from "react-router-dom";
 export default function Navigation() {
   return (
-    <Nav>
-      <LinkStyled to="/">Play</LinkStyled>
-      <LinkStyled to="/history">History</LinkStyled>
-    </Nav>
+    <StyledNav>
+      <StyledNavLink to="/">Play</StyledNavLink>
+      <StyledNavLink to="/history">History</StyledNavLink>
+    </StyledNav>
   );
 }
 
-const Nav = styled.nav`
+const StyledNav = styled.nav`
   display: flex;
-  justify-content: center;
-  flex-wrap: no-wrap;
-  background: #ddd;
-  color: white;
-  height: 38px;
+  justify-content: space-around;
 `;
-
-const LinkStyled = styled(NavLink)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledNavLink = styled(NavLink)`
   text-decoration: none;
+  background-color: #ccc;
   color: black;
-  width: 100%;
+  padding: 5px 35px;
   &.active {
-    background-color: #1209af;
+    background: steelblue;
     color: white;
   }
 `;
